@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Boxes</title>
+    <style>
+    /* note what happens when you resize the browser! */
+    #box_1 {
+    	float: right;
+    	width: 200px;
+    	height: 200px;
+    	background: red;
+    }
+
+    #box_2 {
+    	float: left;
+    	width: 200px;
+    	height: 200px;
+    	background: green;
+    }
+
+    #box_3 {
+    	float: left;
+    	width: 200px;
+    	height: 200px;
+    	background: blue;
+    }
+    p{
+      /* stop floating! */
+      clear: both;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="box_1"></div>
+    <div id="box_2"></div>
+    <div id="box_3"></div>
+    <p>Hello world!<p>
+  </body>
+</html>
