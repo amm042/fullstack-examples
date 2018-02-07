@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<!-- let the browser know this content will fit a mobile device and so
+      the mobile browser doesn't mess up the layout -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- load the bootstrap stylesheet from the local copy -->
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+	<title>Bootstrap alerts example</title>
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Hello world</h1>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dapibus risus ac ex ultrices pulvinar. Proin ligula tellus, porta eu tortor eu, congue aliquam erat. Nam convallis, magna et mattis lobortis, nibh tortor feugiat leo, at pellentesque turpis est id turpis. Vestibulum sollicitudin leo nulla, quis rhoncus felis posuere quis. Nullam accumsan pellentesque tellus ut finibus. Praesent commodo tincidunt nibh non feugiat. Donec pulvinar diam at arcu hendrerit convallis. Maecenas ullamcorper lorem vulputate, maximus dolor ac, pellentesque dolor. Phasellus nec rutrum urna. Quisque rutrum sed enim vehicula lacinia. Suspendisse potenti.</p>
+
+		<!-- more info: https://getbootstrap.com/docs/4.0/components/alerts/ -->
+
+		<div class="alert alert-danger" role="alert">
+		  There is a problem with your input!
+		</div>
+
+
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			This message is <strong>dissmissable</strong>.
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			This one too.
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+  <!-- bootstrap relies on jquery and popper, they must be included first -->
+	<!-- you don't need bootstrap.js if you just want css styling -->
+	<script src="/js/jquery-3.3.1.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
