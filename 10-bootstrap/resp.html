@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Responsive Site</title>
+
+
+    <style>
+    * {
+      box-sizing: border-box; /* height/width includes content padding and borders */
+    }
+    div{
+      border: 1px solid pink;
+      padding: 5px;
+    }
+    .container{
+      width:100%;
+      /* max-width: 1024px; */
+      /* with max-width, left: 10% might not be on center
+         so use auto magins to center */
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .row{
+      /*overflow: hidden; /*since columns float, they overflow the row */
+      /*clear:both; /*each row floats multiple columns*/
+
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .brand{
+      height: 100px;
+      background-image: url("brandimg.jpg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      padding: 25px;
+
+      position: static; /* fill the box */
+      /* top: 0;
+      left:0;
+      right:0;
+      bottom: 0; */
+    }
+
+    /* feature story */
+    .feature {
+      height: 300px;
+      /*padding: 10px;*/
+
+      position: static; /* fill the box */
+      /* top: 0;
+      left:0;
+      right:0;
+      bottom: 0; */
+    }
+
+    /* Keep img from overflowing feature container */
+    .feature img{
+      max-width: 100%;
+      max-height: 100%;
+      width: 100%;
+    }
+
+    .column{
+      /*float: left;*/
+      border-width: 1px;
+      border-style: solid;
+      border-color: black;
+      width: 100%; /*mobile first*/
+      flex-shrink: 0;
+      flex-grow: 1;
+    }
+    p {
+      margin: 15px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: blue;
+    }
+
+    /* media queries */
+
+    /* large screen */
+    @media (min-width: 950px){
+      .container{
+        /*position: relative;*/
+        /*left: 10%;*/
+        width:80%;
+      }
+      .column{
+        width:33%;
+        background-color:rgba(0,255,0,0.1); /*green*/
+      }
+    }
+    @media (min-width: 500px) and (max-width: 949px){
+      .container{
+        /*position: relative;*/
+        /*left: 5%; */
+        width:90%;
+      }
+      .column{
+        width:50%;
+        background-color:rgba(0,0,255,0.1); /*blue*/
+      }
+    }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="brand"></div>
+
+      <div class="feature">
+        <img src="news.jpg" alt="exciting news">
+      </div>
+
+      <div class="row">
+        <div class="column">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque gravida mauris at eleifend. Phasellus placerat, nulla in venenatis finibus, odio purus convallis massa, eu hendrerit urna tellus sit amet lacus.</p>
+        </div>
+        <div class="column">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque gravida mauris at eleifend. Phasellus placerat, nulla in venenatis finibus, odio purus convallis massa, eu hendrerit urna tellus sit amet lacus.</p>
+        </div>
+        <div class="column">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque gravida mauris at eleifend. Phasellus placerat, nulla in venenatis finibus, odio purus convallis massa, eu hendrerit urna tellus sit amet lacus.</p>
+        </div>
+        <div class="column">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque gravida mauris at eleifend. Phasellus placerat, nulla in venenatis finibus, odio purus convallis massa, eu hendrerit urna tellus sit amet lacus.</p>
+        </div>
+        <div class="column">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque gravida mauris at eleifend. Phasellus placerat, nulla in venenatis finibus, odio purus convallis massa, eu hendrerit urna tellus sit amet lacus.</p>
+        </div>
+        <div class="column">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque gravida mauris at eleifend. Phasellus placerat, nulla in venenatis finibus, odio purus convallis massa, eu hendrerit urna tellus sit amet lacus.</p>
+        </div>
+      </div>  <!-- row  -->
+    </div> <!-- container  -->
+  </body>
+</html>
