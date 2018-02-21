@@ -8,11 +8,12 @@ var sayHello = function (name) {
 sayHello('Brian')(); // Hello, Brian!
 
 
-var q= sayHello("Q")
+
+
+var q = sayHello("Q")
 var goodbye = sayHello("goodbye!")
 
 q();
-
 goodbye()
 
 console.log(q)
