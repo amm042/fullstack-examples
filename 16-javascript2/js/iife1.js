@@ -1,11 +1,11 @@
+/*
 var fruit = 'apple'
 
 function run(){
   console.log("Have a " + fruit + " they are red!")
 }
 
-
-/*
+*/
 
 (function(window) {
   //this is now in this funciton's scope!
@@ -22,4 +22,3 @@ function run(){
   window.ns1 = ns1
 
 })(window)
-*/

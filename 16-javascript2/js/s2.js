@@ -1,6 +1,3 @@
-
-
-
 var fruit = 'blueberry'
 
 function run(){

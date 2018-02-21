@@ -1,5 +1,4 @@
-
-
+/*
 
 var fruit = 'blueberry'
 
@@ -7,7 +6,9 @@ function run(){
   console.log("My favorite fruit is " + fruit)
 }
 
-/*
+*/
+
+
 (function(window) {
 
   // empty namespace
@@ -19,7 +20,6 @@ function run(){
     console.log("My favorite fruit is " + ns2.fruit)
   }
   // export namespace globally as ns2
-  window.ns2 = ns2s
+  window.ns2 = ns2
 
 })(window)
-*/

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <script>
+    // function Constructor
+    function Circle (radius) {
+      this.radius = radius
+    }
+
+    // Circle prototypes
+    Circle.prototype.getArea = function(){
+        return Math.PI * this.radius * this.radius
+    }
+    var myCircle = new Circle(10)
+    console.log(myCircle.getArea())
+
+    console.log(myCircle)
+
+
+    </script>
+  </head>
+<body>
+</body>
+</html>
