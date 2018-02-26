@@ -6,24 +6,23 @@
     console.log("starting clock")
 
     g.setInterval(clock.showTime, 1000)
-
-    //clock.showTime
+    clock.showTime()
     var elements = document.querySelectorAll(".add_time")
-    for (var i in elements){
+    for (var i = 0; i < elements.length; i++){
       elements[i].onclick = clock.add_time
     }
 
-    var elements = document.querySelectorAll(".modal_time")
-    for (var i in elements){
-      elements[i].onclick = clock.modalClock
-    }
+    // var elements = document.querySelectorAll(".modal_time")
+    // for (var i = 0; i < elements.length; i++){
+    //   elements[i].onclick = clock.modalClock
+    // }
 
   }
-  clock.add_time = function(element){
+  clock.add_time = function(event){
     //console.log('add time to', this)
 
     document.getElementById('time_container')
-      .innerHTML += '<p class="col-2 current_time"></p>'
+      .innerHTML += '<p class="col-md-2 current_time"></p>'
 
   }
   clock.modalClock = function(event){
@@ -39,7 +38,7 @@
     var count = 0
     for (var i = 0; i < elements.length; i++){
       //console.log(i,'==', elements[i])
-      elements[i].innerHTML = now.toLocaleTimeString()
+      elements[i].textContent = now.toLocaleTimeString()
       count += 1
     }
     console.log("Update time to", now.toLocaleTimeString(),"on", elements.length, 'clocks')
