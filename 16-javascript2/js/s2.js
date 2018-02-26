@@ -1,5 +1,9 @@
-var fruit = 'blueberry'
+{
+  let fruit = 'blueberry'
 
-function run(){
-  console.log("My favorite fruit is " + fruit)
+  var ns2= {}
+
+  ns2.run = function(){
+    console.log("My favorite fruit is " + fruit)
+  }
 }

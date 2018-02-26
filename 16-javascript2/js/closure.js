@@ -9,7 +9,6 @@ sayHello('Brian')(); // Hello, Brian!
 
 
 
-
 var q = sayHello("Q")
 var goodbye = sayHello("goodbye!")
 
@@ -19,7 +18,6 @@ goodbye()
 console.log(q)
 console.log(goodbye)
 
-/*
+
 console.dir(q)
 console.dir(goodbye)
-*/

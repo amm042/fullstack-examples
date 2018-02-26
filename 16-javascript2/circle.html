@@ -6,13 +6,24 @@
     <script>
     // function Constructor
     function Circle (radius) {
+      console.log("circle constructor")
+      console.log(this)
       this.radius = radius
     }
 
     // Circle prototypes
     Circle.prototype.getArea = function(){
+        var self = this
+        var foo = function (){
+          console.log("hi I'm foo'ing radius to 99")
+          self.radius = 99
+        }
+        foo()
         return Math.PI * this.radius * this.radius
     }
+    Circle.prototype.anotherFunction = function(){}
+
+
     var myCircle = new Circle(10)
     console.log(myCircle.getArea())
 
