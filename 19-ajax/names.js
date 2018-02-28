@@ -1,4 +1,4 @@
-function cmpLastName(a,b){
+function lastNameCmp(a,b){
   var lastA = a.split(" ").pop().toUpperCase()
   var lastB = b.split(" ").pop().toUpperCase()
   if (lastA > lastB)
@@ -6,7 +6,6 @@ function cmpLastName(a,b){
   if (lastA < lastB)
     return -1
   return 0
-
 }
 function loadAjax(){
   //var url = "http://localhost:8888/names_err"
@@ -16,7 +15,19 @@ function loadAjax(){
   console.log("making fetch to", url)
 
   fetch(url)
-    //TODO: get names and put in "name_container"
+    .then(resp=>{
+      return resp.json()
+    })
+    .then(json=>{
+      console.log(json.names)
+
+      document.getElementById("name_container")
+        .innerHTML = "<ol>" +
+          json.names.sort(lastNameCmp)
+            .map( item => "<li>" + item + "</li>")
+            .reduce( (accum, value) => accum + value)+
+          "</ol>"
+    })
 }
 
 

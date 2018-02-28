@@ -15,7 +15,20 @@
     function reallyLoadFlower(){
       console.log("loading flower!")
       fetch("./flowers.jpg")
-        // TODO: finish this!
+        .then( resp => {
+          console.log(resp)
+          resp.blob()
+            .then( blob => {
+              console.log(blob)
+              document.getElementById('flowerbox')
+                .src = URL.createObjectURL(blob)
+            })
+            .catch()
+        })
+
+        .catch (error => console.log("ERROR"+error))
+
+
     }
 
     function loadFlower(){
