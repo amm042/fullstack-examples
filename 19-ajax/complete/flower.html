@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ajax flower</title>
+</head>
+<body>
+  <h1>Flowers</h1>
+
+  <img src="ajax-loader.gif" id="flowerbox">
+
+  <script>
+
+    function reallyLoadFlower(){
+      fetch("./flowers.jpg")
+        .then( resp => {
+          console.log("got response!")
+          console.log(resp)
+
+          return resp.blob() // this is another promise!
+        })
+        .then( blob => {
+          console.log("got blob!")
+          console.log(blob)
+
+          document.getElementById("flowerbox")
+            .src = URL.createObjectURL(blob)
+        })
+        .catch ( err => {
+          console.log("Sorry couldn't load the flowers.")
+          console.log(err)
+        })
+    }
+
+    function loadFlower(){
+      setTimeout(reallyLoadFlower, 200);
+    }
+
+    document.addEventListener("DOMContentLoaded", loadFlower);
+  </script>
+</body>
+</html>

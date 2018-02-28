@@ -7,7 +7,7 @@
 
     // TODO save the returned id so we can stop the timer in the future
     g.setInterval(clock.showTime, 1000)
-    clock.showTime()
+    //clock.showTime()
     var elements = document.querySelectorAll(".add_time")
     for (var i = 0; i < elements.length; i++){
       elements[i].onclick = clock.add_time
