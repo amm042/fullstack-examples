@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello React</title>
+
+    <!-- Load Babel -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- Load React -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  </head>
+  <body>
+    <!-- React will fill this container -->
+    <div id="content"></div>
+
+    <script type="text/babel">
+
+class DogBreedSelect extends React.Component{
+  constructor(props){
+    super(props)
+    // MUST initalize state manually!
+    this.state = {breeds: []}
+  }
+  componentWillMount(){
+    // begin fetching dog breeds
+    // do not assign to state, use setState so react knows tehre
+    // was a state change and needs to re-render the view.
+    fetch('https://dog.ceo/api/breeds/list')
+      .then(result=>result.json())
+      .then(breeds=>this.setState({breeds:breeds.message}))
+      .catch(err=>console.log("Couldn't fetch dog breeds", err))
+  }
+  render(){
+    var options
+    if (this.state.breeds.length === 0)
+      options = <option value="loading" key="loading">loading...</option>
+    else {
+      options = ['--select breed--'].concat(this.state.breeds)
+        .map(b=>
+            <option value={b} key={b}>{b}</option>
+          )
+    }
+    return <select>{options}</select>
+  }
+}
+
+ReactDOM.render(
+  <div>
+    <DogBreedSelect/>
+  </div>,
+  document.getElementById('content')
+)
+    </script>
+  </body>
+</html>

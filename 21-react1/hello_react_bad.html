@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello React</title>
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  </head>
+  <body>
+    <!-- React will fill this container -->
+    <div id="content"></div>
+
+    <!--
+    This won't work because the browser doesn't know about JSX, we have
+    to translate JSX into JavaScipt the browser understands....
+    see https://babeljs.io/docs/setup/#installation
+    -->
+    <script>
+      ReactDOM.render(
+        <h1>Hello World</h1>,
+        document.getElementById('content')
+      )
+    </script>
+  </body>
+</html>

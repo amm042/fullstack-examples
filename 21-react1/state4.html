@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello React</title>
+
+    <!-- Load Babel -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- Load React -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  </head>
+  <body>
+    <!-- React will fill this container -->
+    <div id="content"></div>
+
+    <script type="text/babel">
+
+class DogBreedsSelect extends React.Component{
+  constructor(props){
+    super(props)
+    // MUST initalize state manually!
+    // ADDed selectedBreed
+    this.state = {breeds: [], selectedBreed:null}
+
+    // bind additional member functions explicitly to this object!
+    this.handleSelection = this.handleSelection.bind(this)
+  }
+  componentWillMount(){
+    // begin fetching dog breeds
+    // do not assign to state, use setState so react knows tehre
+    // was a state change and needs to re-render the view.
+    fetch('https://dog.ceo/api/breeds/list')
+      .then(result=>result.json())
+      .then(breeds=>this.setState({breeds:breeds.message}))
+      .catch(err=>console.log("Couldn't fetch dog breeds", err))
+  }
+  // added to handle the selection box change event
+  // note react passes an event proxy object to the browser's
+  // event object
+  handleSelection(event){
+    // event.target is the html element that caused this event
+    // we set the dog breed in the attribute value of the select element
+    // we could get the innerHTML of the select element with
+    // event.target.selectedOptions[0].innerHTML
+    console.log("Selction: ", event.target.value)
+    //console.dir(event.target)
+
+    // set this selection into the state, which triggers render()
+    this.setState({selectedBreed:event.target.value})
+  }
+  render(){
+    var options
+    if (this.state.breeds.length === 0)
+      options = <option value="loading" key="loading">loading...</option>
+    else {
+      options = ['--select breed--'].concat(this.state.breeds)
+        .map(b=>
+            <option value={b} key={b}>{b}</option>
+          )
+    }
+    return (
+      <div>
+        <select onChange={this.handleSelection}>{options}</select>
+        { // if breed is selected, show it, else show a friendly message
+          (this.state.selectedBreed === null) ?
+            <p>Select something!</p> :
+            <p>Selected breed is <em>{this.state.selectedBreed}</em></p>
+        }
+      </div>
+    )
+  }
+}
+class DogBreedDisplay extends React.Component {
+  render(){
+    return <p>todo: dog breed display: {this.props.breed}</p>
+  }
+}
+class DogBreedImgSelect extends React.Component{
+  render(){
+    return (
+      <div>
+        <DogBreedsSelect/>
+        <DogBreedDisplay/>
+      </div>
+    )
+  }
+}
+ReactDOM.render(
+  <DogBreedImgSelect/>,
+  document.getElementById('content')
+)
+    </script>
+  </body>
+</html>
