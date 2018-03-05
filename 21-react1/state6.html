@@ -67,7 +67,8 @@ class DogBreedsSelect extends React.Component{
       <div>
         <select onChange={this.handleSelection}>{options}</select>
         { // if breed is selected, show it, else show a friendly message
-          (this.state.selectedBreed === null) ?
+          (this.state.selectedBreed === null ||
+           this.state.selectedBreed === "--select breed--") ?
             <p>Select something!</p> :
             <p>Selected breed is <em>{this.state.selectedBreed}</em></p>
         }
@@ -79,14 +80,22 @@ class DogBreedDisplay extends React.Component {
   constructor(props){
     super(props)
     // load a default placeholder when there is no do breed selected
-    this.state = {imgurl: 'http://via.placeholder.com/350x350'}
+    this.placeholderurl = 'http://via.placeholder.com/350x350'
+    this.state = {imgurl: this.placeholderurl}
   }
   componentWillReceiveProps(newProps){
     if (newProps.breed !== this.props.breed){
+      console.log("new breed recieved", newProps.breed)
       //update the image.
       fetch('https://dog.ceo/api/breed/' + newProps.breed + '/images/random')
         .then(resp => resp.json())
-        .then(jresp => this.setState({imgurl:jresp.message}))
+        .then(jresp => {
+          if (jresp.status === "success")
+            this.setState({imgurl:jresp.message})
+          else {
+            this.setState({imgurl:this.placeholderurl})
+          }
+        })
         .catch(err => console.log("ERR:", err))
     }
   }
