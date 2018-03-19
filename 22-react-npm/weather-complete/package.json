@@ -1,6 +1,5 @@
 {
-  "name": "weather",
-  "homepage": "https://amm042.github.io/fullstack-examples/22-react-npm/weather-complete/release/v1.0",
+  "name": "weather",  
   "version": "0.1.0",
   "private": true,
   "dependencies": {
