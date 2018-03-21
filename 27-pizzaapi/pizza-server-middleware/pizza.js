@@ -12,22 +12,38 @@ var orderId = 0
 // the bodyParser.json() function
 app.use(bodyParser.json())
 
+
+// The API always uses the route :orderName,
+// we can move checking for the order into an application-level
+// middleware
+function pizzaParser(req, res, next){
+  if (req.params.orderName in orders){
+    req.pizzaOrder = orders[req.params.orderName]
+    next()
+  }else{
+    res.json({result:'order not found.'})
+  }
+}
+// bind middleware to the application
+// for GET, DELETE, and POST
+app.get('/:orderName', pizzaParser)
+app.delete('/:orderName', pizzaParser)
+app.post('/:orderName', pizzaParser)
+
+// show all orders
 app.get('/', (req, res) => res.json(orders))
 
 // route parameters are prefixed with a :
 app.get('/:orderName', (req, res) => {
-  if (req.params.orderName in orders){
-    res.json({
-        result:'success',
-        order: orders[req.params.orderName]
-      })
-  }else{
-    res.json({result:'order not found.'})
-  }
+  res.json({
+      result:'success',
+      order: req.pizzaOrder
+    })
 })
 
 // place an order, deal with toppincs later
 // if order already exists, overwrite
+// Does not use pizzaParser middleware!
 app.put('/:orderName', (req, res) => {
   console.log("Create order for", req.params.orderName)
   orders[req.params.orderName] = {
@@ -42,30 +58,27 @@ app.put('/:orderName', (req, res) => {
 })
 
 app.delete('/:orderName', (req, res) => {
-  console.log("Delete order for", req.params.orderName)
-  if (req.params.orderName in orders){
-    delete orders[req.params.orderName]
-    res.json({result:"success"})
-  }else{
-    res.json({result:'order not found.'})
-  }
+  console.log("Delete order for", req.pizzaOrder)
+
+  // can't use req.pizzaOrder we want to delete from orders directly!
+  delete orders[req.params.orderName]
+
+  res.json({result:"success"})
 })
 
 // assume post is a JSON array of topping strings.
 // like ["pepperoni", "extra cheese" ,"pickles"]
 app.post('/:orderName', (req, res) => {
-  if (req.params.orderName in orders){
-    console.log('post', req.body)
-    // push new toppings array to toppings array
-    // ... is the ES6 spread operator like *args in python
-    orders[req.params.orderName].toppings.push(...req.body)
-    res.json({   // echo the order back (which now has an order number)
-      result: 'success',
-      order: orders[req.params.orderName]
-    })
-  }else{
-    res.json({result:'order not found.'})
-  }
+
+  console.log('post', req.body)
+  // push new toppings array to toppings array
+  // ... is the ES6 spread operator like *args in python
+  req.pizzaOrder.toppings.push(...req.body)
+  res.json({   // echo the order back (which now has an order number)
+    result: 'success',
+    order: req.pizzaOrder
+  })
+
 })
 
 app.listen(3000, () => console.log('Pizza server listening on port 3000!'))
