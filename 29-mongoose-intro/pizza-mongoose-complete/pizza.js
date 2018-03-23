@@ -17,6 +17,14 @@ var orderSchema = mongoose.Schema({
 // bind schema to the mongodb collection 'pizza-orders'
 var Order = mongoose.model('pizza-orders', orderSchema)
 
+// set to remove all docs in database, if there is anything leftover
+var cleanDb = false
+
+if (cleanDb === true){
+  Order.remove({}, err=>{
+    if(err) console.log("failed to remove all docs")
+  })
+}
 // a place to store all of the orders
 // don't need this any more!
 //var orders = {}
@@ -32,14 +40,11 @@ app.use(bodyParser.json())
 // we can move checking for the order into an application-level
 // middleware
 function pizzaParser(req, res, next){
+
   // this no longer works, we have to query the database (use Order.find()!)
   // if (req.params.orderName in orders){
 
-  /*
-
-  TODO: uncomment this and fill in the ???? with the query
-
-  Order.find( ????, (err, orders)=>{
+  Order.find({name: req.params.orderName}, (err, orders)=>{
     if (err || orders.length === 0) {
       res.json({result:'order not found.'})
     }else{
@@ -47,7 +52,6 @@ function pizzaParser(req, res, next){
       next()
     }
   })
-  */
 
 }
 // bind middleware to the application
@@ -58,8 +62,6 @@ app.post('/:orderName', pizzaParser)
 
 // show all orders
 app.get('/', (req, res) => {
-  // nothing TODO here, find with no query returns everything
-  // note you can the result as a promise or pass a callback function
   Order.find().then(orders => {
       res.json(orders)
     })
@@ -79,14 +81,14 @@ app.get('/:orderName', (req, res) => {
 app.put('/:orderName', (req, res) => {
   console.log("Create order for", req.params.orderName)
 
+
   // insert a new order in the database
   // don't forget to set the default toppings: ['Cheese']
+  var order = Order({
+      name:req.params.orderName,
+      toppings:['Cheese']})
+  order.save()
 
-  // TODO
-  //var order = Order( ???? )
-  //order.save()
-
-  // Old code, for reference.
   // orders[req.params.orderName] = {
   //   number: orderId,
   //   toppings: ['Cheese'] // default topping
@@ -105,9 +107,6 @@ app.delete('/:orderName', (req, res) => {
   // use Order.remove()!
   // delete orders[req.params.orderName]
 
-  // this is done for you, no TODO!
-  // best to use the unique _id assigned by mongo
-  // to ensure we only delete one order.
   Order.remove({_id:req.pizzaOrder._id}, err=>{
     if (err) {
       res.json({result:"error", message:err})
@@ -128,9 +127,7 @@ app.post('/:orderName', (req, res) => {
   // ... is the ES6 spread operator like *args in python
   // don't forget to save it back to the database!
   req.pizzaOrder.toppings.push(...req.body)
-
-  // TODO, how do you SAVE the modified pizzaOrder back to the database?
-
+  req.pizzaOrder.save()
   res.json({   // echo the order back (which now has an order number)
     result: 'success',
     order: req.pizzaOrder
