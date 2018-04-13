@@ -46,7 +46,9 @@ The Bucket Policy should be something like this:
     ]
 }
 ```
-The IAM user has policy:
+The IAM user has policy (but I think the bucket policy overrides this --
+  because it doesn't specify delete but it is possible to delete with
+  this user.
 ```
 {
     "Version": "2012-10-17",
