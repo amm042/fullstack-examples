@@ -17,8 +17,8 @@ aws_access_key_id = abcdefg
 aws_secret_access_key = 12345678
 `
 
-The bUCKET POLICY IS
-
+The Bucket Policy should be something like this:
+```
 {
     "Version": "2012-10-17",
     "Id": "Policy1523472141748",
@@ -33,6 +33,7 @@ The bUCKET POLICY IS
                 "s3:GetBucketLocation",
                 "s3:GetObject",
                 "s3:Get*",
+                "s3:DeleteObject",
                 "s3:ListBucket",
                 "s3:ListBucketVersions",
                 "s3:Put*"
@@ -44,3 +45,25 @@ The bUCKET POLICY IS
         }
     ]
 }
+```
+The IAM user has policy:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::labapp-uploads",
+                "arn:aws:s3:::labapp-uploads/*"
+            ]
+        }
+    ]
+}
+```
