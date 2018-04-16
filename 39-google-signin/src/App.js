@@ -54,6 +54,8 @@ class App extends Component {
       // check if the user is currently logged in...
       if (!this.state.isSignedIn) {
         console.log("app mounted, checking signin")
+
+        // this loads teh google api object
         window.gapi.load('auth2', () => {
           // create a new Oauth2.0 ceredential at console.cloud.google.com
           window.gapi.auth2.init({
@@ -68,6 +70,8 @@ class App extends Component {
               //maybe better store in react state... not sure.
               window.gapi.auth2 = auth2
 
+              // we can finally ask google if the user is currently signed in
+              // or not
               if (auth2.isSignedIn.get()){
                 // if they are already logged in, pass to the login code.
                 let q = auth2.currentUser.get();
@@ -76,7 +80,6 @@ class App extends Component {
                 // else trigger the login popup
                 this.setState({isSignedIn:false})
               }
-
             })
           .catch((reason)=>{
             console.log("auth2.init failed with: " + reason.error)
@@ -87,7 +90,9 @@ class App extends Component {
   }
 
   handleLogin(gUser){
+    // store the user in the component state
     this.setState({googleUser: gUser, isSignedIn:true})
+
     //send user to backend!
     //https://developers.google.com/identity/sign-in/web/backend-auth
     let token = gUser.getAuthResponse().id_token
@@ -101,7 +106,9 @@ class App extends Component {
     })
     .then(rsp => rsp.json())
     .then(rsp => {
+      // hopefully everything worked.
       console.log("server login response was", rsp)
+      // reget session data from the server (just for demo)
       this.refreshSession()
     })
     .catch(err => {
@@ -109,23 +116,39 @@ class App extends Component {
     })
   }
   handleLogout(){
+    // user cliked the logout button, log them out in the browser
+    // and also tell the backend they logged out.
     console.log("got singout click")
     window.gapi.auth2.signOut()
       .then(()=>{
         console.log("signed out!")
 
-        // TODO should let backend know....
-        this.setState({ googleUser:null, isSignedIn: false})
-        this.refreshSession()
+        // assume the current user is stored in the backed's session data
+        // so we don't have to explicitly add the user to the request
+        // (its sent in the cookie)
+        fetch(backendUrl+'/logout', {
+          credentials: 'include',
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'}
+        })
+        .then(rsp => rsp.json())
+        .then(rsp => {
+          console.log("server logut response was", rsp)
+          this.setState({ googleUser:null, isSignedIn: false})
+          this.refreshSession()
+        })
+        .catch(err => {
+          console.log("LOGOUT FAILED:", err)
+        })
       })
   }
+
   obj_to_list(o){
     // recursive object dump
     if (o === null)
       return "null"
     if (typeof o !== 'object')
       return o.toString()
-
     let dump = Object.keys(o).map(
       k => {
         return <li key={k}>{k}: {this.obj_to_list(o[k])}</li>
@@ -134,14 +157,15 @@ class App extends Component {
     return <ul>{dump}</ul>
   }
   render() {
-    // possible ugly hack to handle when we don't have a valid user.
+    // if we have a logged in user profile, show the name and icon
     let profile = (this.state.googleUser) ?
       this.state.googleUser.getBasicProfile() :
       null
     let pimg = (profile) ? <img src={profile.getImageUrl()} alt='you'/> : ""
     let pname = (profile)? <p>Hello {profile.getName()}</p>: <p>Please sign in</p>
-    let session_dump = this.obj_to_list(this.state.serverSession)
 
+    // dump the session data to a list to display to the user
+    let session_dump = this.obj_to_list(this.state.serverSession)
 
     return (
       <Container>

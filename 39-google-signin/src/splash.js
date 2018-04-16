@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 import { Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap'
 
 class Splash extends Component {
-
+    // A simple modal login splash screen.
+    // the gapi is a little picky how it's placed on the page    
     constructor(props) {
         super(props)
         console.log("Splash constructed, props", this.props)
@@ -38,7 +39,7 @@ class Splash extends Component {
     render() {
           return (
               <Modal isOpen={this.props.show}>
-                <ModalHeader>Please Signin</ModalHeader>
+                <ModalHeader>Please Sign in</ModalHeader>
                 <ModalBody center="true">
                   <div className="my-signin2-body">
                     <div id="my-signin2"/>

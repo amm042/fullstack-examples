@@ -90,18 +90,27 @@ async function verify(token) {
   return payload
 }
 
+app.post('/logout', (req,res) =>{
+  // log out the current session.
+  req.session.destroy()
+  res.json({result:'ok'})
+})
+
 app.post('/login', (req,res) =>{
-  //https://developers.google.com/identity/sign-in/web/backend-auth
+  // https://developers.google.com/identity/sign-in/web/backend-auth
+  // react app handles the login and posts the token here.
   if ('token' in req.body){
     console.log("got login request, checking token...")
+
+    // have to verify the token before using
     verify(req.body.token)
       .then((profile)=>{
         console.log("verified sub=", profile.sub,
-        'name=', profile.name,
-        'email=', profile.email,
-        'domain=', profile.hd)
+          'name=', profile.name,
+          'email=', profile.email,
+          'domain=', profile.hd)
 
-
+        // make some session counters (just examples)
         if (!req.session.loginCount){
           req.session.loginCount=1
         }else{
@@ -109,7 +118,6 @@ app.post('/login', (req,res) =>{
         }
         req.session.profile = profile
         req.session.lastAccess = new Date()
-        console.log("updated session", req.session)
 
         res.json({result:'ok'})
       })
@@ -121,13 +129,20 @@ app.post('/login', (req,res) =>{
 })
 
 app.get('/', (req,res)=>{
+  // get on the root just returns a copy of the sesson data
+  // to demonstrate how sessions work
+
+  // update session counters
   if (!req.session.rootCount){
     req.session.rootCount = 1
   }else{
     req.session.rootCount += 1
   }
+  req.session.lastAccess = new Date()
   console.log("request / which has:", req.session)
-  res.json({'result':'ok', 'session': req.session
+  res.json({
+    'result':'ok',
+    'session': req.session
   })
 })
 
