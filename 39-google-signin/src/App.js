@@ -11,6 +11,8 @@ import './App.css';
 //import Icons from 'react-icons/lib/md'
 import * as Icons from 'react-icons/lib/md';
 
+// create a unquie app for your client at https://console.cloud.google.com/apis/
+const CLIENT_ID = '939123929106-brcgf18dm3vgu39qe8fml43rc0rs5t7q.apps.googleusercontent.com'
 const backendUrl = "http://localhost:4060"
 
 /*
@@ -27,20 +29,35 @@ class App extends Component {
 
     this.state = {
         isSignedIn: null,
-        googleUser: null
+        googleUser: null,
+        serverSession: {}
       }
 
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
+    this.refreshSession = this.refreshSession.bind(this)
+  }
+  refreshSession(){
+    // load the session data.
+    // pass credentials: 'include' to enable cookies!
+    fetch(backendUrl+'/', {credentials: 'include'})
+      .then(resp => resp.json())
+      .then(resp => {
+        console.log("got api root: ", resp)
+        this.setState({serverSession: resp.session})
+      })
+      .catch(err=>console.log("ERROR:", err))
+
   }
   componentDidMount(){
+      this.refreshSession()
       // check if the user is currently logged in...
       if (!this.state.isSignedIn) {
         console.log("app mounted, checking signin")
         window.gapi.load('auth2', () => {
           // create a new Oauth2.0 ceredential at console.cloud.google.com
           window.gapi.auth2.init({
-            client_id: '939123929106-brcgf18dm3vgu39qe8fml43rc0rs5t7q.apps.googleusercontent.com',
+            client_id: CLIENT_ID,
             fetch_basic_profile: true
           })
           .then((auth2)=>{
@@ -77,6 +94,7 @@ class App extends Component {
     let body = JSON.stringify({token:token})
     console.log("send to backend", body)
     fetch(backendUrl+'/login', {
+      credentials: 'include',
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: body
@@ -84,6 +102,10 @@ class App extends Component {
     .then(rsp => rsp.json())
     .then(rsp => {
       console.log("server login response was", rsp)
+      this.refreshSession()
+    })
+    .catch(err => {
+      console.log("LOGIN FAILED:", err)
     })
   }
   handleLogout(){
@@ -91,8 +113,25 @@ class App extends Component {
     window.gapi.auth2.signOut()
       .then(()=>{
         console.log("signed out!")
+
+        // TODO should let backend know....
         this.setState({ googleUser:null, isSignedIn: false})
+        this.refreshSession()
       })
+  }
+  obj_to_list(o){
+    // recursive object dump
+    if (o === null)
+      return "null"
+    if (typeof o !== 'object')
+      return o.toString()
+
+    let dump = Object.keys(o).map(
+      k => {
+        return <li key={k}>{k}: {this.obj_to_list(o[k])}</li>
+      }
+    )
+    return <ul>{dump}</ul>
   }
   render() {
     // possible ugly hack to handle when we don't have a valid user.
@@ -101,6 +140,8 @@ class App extends Component {
       null
     let pimg = (profile) ? <img src={profile.getImageUrl()} alt='you'/> : ""
     let pname = (profile)? <p>Hello {profile.getName()}</p>: <p>Please sign in</p>
+    let session_dump = this.obj_to_list(this.state.serverSession)
+
 
     return (
       <Container>
@@ -120,9 +161,24 @@ class App extends Component {
         <Splash
           show={this.state.isSignedIn === false}
           onLogin={this.handleLogin}/>
-        <Col>
-          <Row><p>... your website content here ... </p></Row>
-        </Col>
+        <Row><hr/></Row>
+        <Row>
+          <Col>
+            <h4>Session dump ({Object.keys(this.state.serverSession).length} items)
+              <Button
+                color="primary"
+                onClick={this.refreshSession}>
+              <Icons.MdRefresh/></Button>
+            </h4>
+            {session_dump}
+          </Col>
+        </Row>
+        <Row><hr/></Row>
+        <Row>
+          <Col>
+            <p>... your website content here ... </p>
+          </Col>
+        </Row>
       </Container>
     );
   }

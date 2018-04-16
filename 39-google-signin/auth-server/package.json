@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "connect-mongodb-session": "^2.0.2",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "google-auth-library": "^1.4.0",
     "nodemon": "^1.17.3"
   }
