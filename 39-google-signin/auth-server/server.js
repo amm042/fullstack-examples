@@ -131,19 +131,28 @@ app.post('/login', (req,res) =>{
 app.get('/', (req,res)=>{
   // get on the root just returns a copy of the sesson data
   // to demonstrate how sessions work
-
-  // update session counters
-  if (!req.session.rootCount){
-    req.session.rootCount = 1
-  }else{
-    req.session.rootCount += 1
+  if ('profile' in req.session){
+    // if logged in update session counters
+    if (!req.session.rootCount){
+      req.session.rootCount = 1
+    }else{
+      req.session.rootCount += 1
+    }
+    req.session.lastAccess = new Date()
+    console.log("request / which has:", req.session)
+    res.json({
+      'result':'ok',
+      'session': req.session
+    })
   }
-  req.session.lastAccess = new Date()
-  console.log("request / which has:", req.session)
-  res.json({
-    'result':'ok',
-    'session': req.session
-  })
+  else {
+    console.log("request / from a non-logged in user.")
+    res.json({
+      'result':'error',
+      'message': 'You must log in to use this method.',
+      'session': null,
+    })
+  }
 })
 
 app.listen(4060, () => console.log('Example app listening on port 4060!'))

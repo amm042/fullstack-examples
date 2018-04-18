@@ -44,7 +44,13 @@ class App extends Component {
       .then(resp => resp.json())
       .then(resp => {
         console.log("got api root: ", resp)
-        this.setState({serverSession: resp.session})
+
+        // check result first.
+        if (resp.result === 'ok'){
+          this.setState({serverSession: resp.session})
+        } else{
+          this.setState({serverSession: {}})
+        }
       })
       .catch(err=>console.log("ERROR:", err))
 
